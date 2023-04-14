@@ -80,6 +80,7 @@ export const FormEvent = () => {
         <DatePicker
           className='w-full rounded-md border bg-gray-50 border-gray-300'
           id='date1'
+          name='start'
           selected={formValues.start}
           onChange={event => onDateChanged(event, 'start')}
           dateFormat='Pp'
@@ -98,6 +99,7 @@ export const FormEvent = () => {
         <DatePicker
           className='w-full rounded-md border bg-gray-50 border-gray-300'
           id='date2'
+          name='end'
           minDate={formValues.start}
           selected={formValues.end}
           onChange={event => onDateChanged(event, 'end')}

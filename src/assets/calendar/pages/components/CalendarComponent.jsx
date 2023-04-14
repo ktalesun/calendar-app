@@ -1,11 +1,12 @@
+/* eslint-disable no-undef */
 import { Calendar } from 'react-big-calendar'
 // import { addHours } from 'date-fns'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { localizer, getMessages } from '../../../../helpers'
 import { CalendarEvent, CalendarModal } from './'
-import { useState } from 'react'
-import { useCalendarStore, useUiStore } from '../../../hooks'
+import { useState, useEffect } from 'react'
+import { useAuthStore, useCalendarStore, useUiStore } from '../../../hooks'
 import { FabAddNew, FabDeleteEvent } from '../../../ui'
 
 // const myEventsList = [{
@@ -22,11 +23,15 @@ import { FabAddNew, FabDeleteEvent } from '../../../ui'
 // }]
 
 export const CalendarComponent = () => {
-  // eslint-disable-next-line no-undef
+  const { openDateModal } = useUiStore()
+  const { eventsList, setActiveEvent, startLoadingEvents } = useCalendarStore()
   const [lastView, setLastView] = useState(localStorage.getItem('lastview') || 'month')
+  const { user } = useAuthStore()
+
   const eventStyleGetter = (event, start, end, isSelected) => {
+    const isMyEvent = (user.uid === event.user._id) || (user.uid === event.user.uid)
     const style = {
-      backgroundColor: '#347cf7',
+      backgroundColor: (isMyEvent) ? '#347cf7' : '#465660',
       borderRadius: '0px',
       opacity: 0.8,
       color: 'white'
@@ -36,9 +41,6 @@ export const CalendarComponent = () => {
       style
     }
   }
-
-  const { openDateModal } = useUiStore()
-  const { eventsList, setActiveEvent } = useCalendarStore()
 
   const onSelect = (event) => {
     setActiveEvent(event)
@@ -54,6 +56,10 @@ export const CalendarComponent = () => {
     localStorage.setItem('lastview', event)
     setLastView(event)
   }
+  useEffect(() => {
+    startLoadingEvents()
+  }, [])
+
   return (
     <>
       <Calendar

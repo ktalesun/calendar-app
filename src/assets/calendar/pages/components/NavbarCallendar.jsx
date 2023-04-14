@@ -1,8 +1,13 @@
 import { Avatar, Dropdown, Navbar } from 'flowbite-react'
 import React from 'react'
+import { useAuthStore } from '../../../hooks'
 // import { ToogleLanguajeButton } from '../../../ui'
 
 export const NavbarCallendar = () => {
+  const { startLogout, user } = useAuthStore()
+  const handleLogout = () => {
+    startLogout()
+  }
   return (
     <Navbar
       fluid
@@ -15,7 +20,7 @@ export const NavbarCallendar = () => {
           alt='Flowbite Logo'
         />
         <span className='self-center whitespace-nowrap text-xl font-semibold dark:text-white'>
-          Kevin León Hernández
+          {user.name}
         </span>
       </Navbar.Brand>
       {/* <ToogleLanguajeButton /> */}
@@ -27,14 +32,11 @@ export const NavbarCallendar = () => {
         >
           <Dropdown.Header>
             <span className='block text-sm'>
-              Bonnie Green
-            </span>
-            <span className='block truncate text-sm font-medium'>
-              name@flowbite.com
+              {user.name}
             </span>
           </Dropdown.Header>
           <Dropdown.Divider />
-          <Dropdown.Item>
+          <Dropdown.Item onClick={handleLogout}>
             Sign out
           </Dropdown.Item>
         </Dropdown>

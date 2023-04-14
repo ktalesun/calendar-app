@@ -1,10 +1,20 @@
 
 import { Tabs } from 'flowbite-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LoginComponent } from './components/LoginComponent'
 import { RegisterComponent } from './components/RegisterComponent'
+import { useAuthStore } from '../../hooks'
+import Swal from 'sweetalert2'
 
 export const LoginRegisterPage = () => {
+  const { errorMessage } = useAuthStore()
+
+  useEffect(() => {
+    if (errorMessage !== null && errorMessage) {
+      Swal.fire('Ups! algo pasó', errorMessage, 'error')
+    }
+  }, [errorMessage])
+
   return (
     <section className='flex place-content-center place-items-center h-screen'>
       <article className='min-w-[1024px] min-h-[640px]'>
